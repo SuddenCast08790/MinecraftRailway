@@ -14,6 +14,7 @@ import org.lwjgl.glfw.GLFW;
 public class MetroKeys {
     public static KeyBinding ADD_STATION;
     public static KeyBinding CANCEL;
+    public static KeyBinding AUTO_STOP;
 
     public static void register() {
         ADD_STATION = KeyBindingHelper.registerKeyBinding(new KeyBinding(
@@ -25,6 +26,11 @@ public class MetroKeys {
                 "key.metro_map.cancel",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_H,
+                "category.metro_map"));
+        AUTO_STOP = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.metro_map.auto_stop",
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_J,
                 "category.metro_map"));
     }
 }

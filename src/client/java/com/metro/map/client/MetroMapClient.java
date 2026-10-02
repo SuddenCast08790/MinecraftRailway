@@ -1,5 +1,6 @@
 package com.metro.map.client;
 
+import com.metro.map.client.autowalk.AutoWalker;
 import com.metro.map.client.command.MetroCommand;
 import com.metro.map.client.hud.MetroHud;
 import com.metro.map.client.session.SessionManager;
@@ -33,7 +34,11 @@ public class MetroMapClient implements ClientModInitializer {
             if (MetroKeys.CANCEL.wasPressed()) {
                 StationFlow.onCancelKey(client);
             }
+            while (MetroKeys.AUTO_STOP.wasPressed()) {
+                AutoWalker.stop(client, "玩家按键请求停止");
+            }
             SessionManager.onEndTick(client);
+            AutoWalker.onTick(client);
         });
 
         // HUD 状态提示
@@ -43,8 +48,14 @@ public class MetroMapClient implements ClientModInitializer {
         MetroCommand.register();
 
         // 断开连接 / 关闭游戏时强制落盘
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> SessionManager.flushAll());
-        ClientLifecycleEvents.CLIENT_STOPPING.register(client -> SessionManager.flushAll());
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+            AutoWalker.forceStopSilent(client);
+            SessionManager.flushAll();
+        });
+        ClientLifecycleEvents.CLIENT_STOPPING.register(client -> {
+            AutoWalker.forceStopSilent(client);
+            SessionManager.flushAll();
+        });
 
         LOGGER.info("Metro Map client initialized. Press {} to add a station.",
                 MetroKeys.ADD_STATION.getBoundKeyLocalizedText().getString());

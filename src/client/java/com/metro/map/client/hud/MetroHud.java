@@ -1,6 +1,7 @@
 package com.metro.map.client.hud;
 
 import com.metro.map.client.MetroKeys;
+import com.metro.map.client.autowalk.AutoWalker;
 import com.metro.map.client.session.SessionManager;
 import com.metro.map.model.Line;
 import com.metro.map.session.WalkSession;
@@ -39,6 +40,10 @@ public class MetroHud {
         if (k != null) {
             draw(ctx, x, y + 20, "§7[" + k.getBoundKeyLocalizedText().getString() + "]设站 · ["
                     + MetroKeys.CANCEL.getBoundKeyLocalizedText().getString() + "]取消/停用", false);
+        }
+        if (AutoWalker.isWalking()) {
+            draw(ctx, x, y + 30, "§a▶ 自动行走 → " + AutoWalker.targetLabel()
+                    + " §7[" + MetroKeys.AUTO_STOP.getBoundKeyLocalizedText().getString() + "]停止", false);
         }
     }
 

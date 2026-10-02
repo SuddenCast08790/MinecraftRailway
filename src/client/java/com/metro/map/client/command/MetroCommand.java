@@ -1,6 +1,8 @@
 package com.metro.map.client.command;
 
 import com.metro.map.client.MetroMapClient;
+import com.metro.map.client.autowalk.AutoWalker;
+import com.metro.map.model.Station;
 import com.metro.map.client.StationFlow;
 import com.metro.map.client.gui.LineConfigScreen;
 import com.metro.map.client.session.SessionManager;
@@ -78,6 +80,19 @@ public class MetroCommand {
                                                 .executes(c -> exportLine(c,
                                                         StringArgumentType.getString(c, "line"),
                                                         StringArgumentType.getString(c, "file")))))))
+                .then(ClientCommandManager.literal("auto")
+                        .then(ClientCommandManager.literal("start")
+                                .then(ClientCommandManager.argument("station", StringArgumentType.greedyString())
+                                        .executes(MetroCommand::autoToStation))
+                                .then(ClientCommandManager.literal("pos")
+                                        .then(ClientCommandManager.argument("x", FloatArgumentType.floatArg(-3e7f, 3e7f))
+                                                .then(ClientCommandManager.argument("y", FloatArgumentType.floatArg(-2e9f, 2e9f))
+                                                        .then(ClientCommandManager.argument("z", FloatArgumentType.floatArg(-3e7f, 3e7f))
+                                                                .executes(MetroCommand::autoToCoord))))))
+                        .then(ClientCommandManager.literal("stop")
+                                .executes(c -> { AutoWalker.stop(c.getSource().getClient(), "命令请求停止"); return 1; }))
+                        .then(ClientCommandManager.literal("status")
+                                .executes(MetroCommand::autoStatus)))
                 .then(ClientCommandManager.literal("simplify")
                         .then(ClientCommandManager.argument("tolerance", FloatArgumentType.floatArg(0f, 64f))
                                 .executes(MetroCommand::simplifyPreview)))
@@ -208,5 +223,41 @@ public class MetroCommand {
 
     private static String sanitize(String s) {
         return s.replaceAll("[\\\\/:*?\"<>|\\s]+", "_");
+    }
+
+    // ---------------- auto walk ----------------
+
+    private static int autoToStation(CommandContext<FabricClientCommandSource> c) {
+        var client = c.getSource().getClient();
+        if (AutoWalker.isWalking()) { c.getSource().sendError(Text.literal("自动行走已在进行中，先 /metro auto stop")); return 0; }
+        String ref = StringArgumentType.getString(c, "station");
+        Station st = null; String label = null;
+        for (Line l : SessionManager.data.lines) {
+            for (Station s2 : l.stations) {
+                if (s2.id.equalsIgnoreCase(ref) || s2.name.equalsIgnoreCase(ref)) { st = s2; label = l.name + "·" + s2.name; break; }
+            }
+            if (st != null) break;
+        }
+        if (st == null) { c.getSource().sendError(Text.literal("找不到站点: " + ref)); return 0; }
+        AutoWalker.start(client, st.pos.x, st.pos.y, st.pos.z, label);
+        return 1;
+    }
+
+    private static int autoToCoord(CommandContext<FabricClientCommandSource> c) {
+        var client = c.getSource().getClient();
+        if (AutoWalker.isWalking()) { c.getSource().sendError(Text.literal("自动行走已在进行中，先 /metro auto stop")); return 0; }
+        float x = FloatArgumentType.getFloat(c, "x");
+        float y = FloatArgumentType.getFloat(c, "y");
+        float z = FloatArgumentType.getFloat(c, "z");
+        AutoWalker.start(client, x, y, z, String.format("(%.0f, %.0f, %.0f)", x, y, z));
+        return 1;
+    }
+
+    private static int autoStatus(CommandContext<FabricClientCommandSource> c) {
+        if (AutoWalker.isWalking())
+            c.getSource().sendFeedback(Text.literal("§a[Auto] §r行走中 → " + AutoWalker.targetLabel()));
+        else
+            c.getSource().sendFeedback(Text.literal("§e[Auto] §r空闲。/metro auto start <站名|坐标>"));
+        return 1;
     }
 }

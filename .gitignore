@@ -1,8 +1,7 @@
-# Gradle build cache
+# Gradle
 .gradle/
-
-# Compiled class files and build outputs
 build/
 
-# Log files
+# Logs and Temp files
 *.log
+*.tmp

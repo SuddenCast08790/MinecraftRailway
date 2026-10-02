@@ -3,7 +3,7 @@ package com.metro.map.client.screenshot;
 import com.metro.map.MetroMapMod;
 import com.metro.map.storage.StorageManager;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.screen.Screen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.Util;
 
 import java.io.IOException;

@@ -18,12 +18,6 @@ repositories {
 loom {
     splitEnvironmentSourceSets()
 
-    mixins {
-        "metro_map" {
-            config "metro_map.client.mixins.json"
-        }
-    }
-
     mods {
         "metro_map" {
             sourceSet sourceSets.main
