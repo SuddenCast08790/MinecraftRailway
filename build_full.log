@@ -1,0 +1,57 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14.2/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :
+Fabric Loom: 1.11.8
+:remapping sources
+
+> Task :compileJava
+> Task :processResources
+> Task :classes
+
+> Task :compileClientJava
+/workspace/src/client/java/com/metro/map/client/screenshot/NoHudScreenshot.java:6: error: cannot find symbol
+import net.minecraft.screen.Screen;
+                           ^
+  symbol:   class Screen
+  location: package net.minecraft.screen
+/workspace/src/client/java/com/metro/map/client/screenshot/NoHudScreenshot.java:80: error: cannot find symbol
+    private static void restore(MinecraftClient client, Screen saved) {
+                                                        ^
+  symbol:   class Screen
+  location: class NoHudScreenshot
+2 errors
+
+> Task :compileClientJava FAILED
+
+[Incubating] Problems report is available at: file:///workspace/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileClientJava'.
+> Compilation failed; see the compiler output below.
+  /workspace/src/client/java/com/metro/map/client/screenshot/NoHudScreenshot.java:6: error: cannot find symbol
+  import net.minecraft.screen.Screen;
+                             ^
+    symbol:   class Screen
+    location: package net.minecraft.screen
+  /workspace/src/client/java/com/metro/map/client/screenshot/NoHudScreenshot.java:80: error: cannot find symbol
+      private static void restore(MinecraftClient client, Screen saved) {
+                                                          ^
+    symbol:   class Screen
+    location: class NoHudScreenshot
+  2 errors
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to get full insights.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.14.2/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 3m 45s
+3 actionable tasks: 3 executed

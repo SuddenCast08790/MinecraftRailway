@@ -1,0 +1,7 @@
+# Gradle
+.gradle/
+build/
+
+# Logs and Temp files
+*.log
+*.tmp
