@@ -49,9 +49,12 @@ public class Line {
     public String nextSegmentId() {
         int n = segments.size() + 1;
         String id;
+        boolean exists;
         do {
             id = String.format("seg-%03d", n++);
-        } while (segments.stream().anyMatch(sg -> sg.id.equals(id)));
+            final String candidate = id;
+            exists = segments.stream().anyMatch(sg -> sg.id.equals(candidate));
+        } while (exists);
         return id;
     }
 }

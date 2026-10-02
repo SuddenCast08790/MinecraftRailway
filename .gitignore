@@ -1,1 +1,8 @@
-(empty)
+# Gradle build cache
+.gradle/
+
+# Compiled class files and build outputs
+build/
+
+# Log files
+*.log
