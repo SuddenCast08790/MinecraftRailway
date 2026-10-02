@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "metro_map",
+  "version": "${version}",
+  "name": "Metro Map",
+  "description": "根据玩家行走路线生成轨道交通线路图，支持站点拍照(无HUD高清截图)、即时保存与 JSON 导出。仅客户端功能，可安全安装于连接 PaperMC 服务器的客户端。",
+  "authors": ["MetroMap Team"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.metro.map.MetroMapMod"
+    ],
+    "client": [
+      "com.metro.map.client.MetroMapClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.17.0",
+    "minecraft": "~1.21.8",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

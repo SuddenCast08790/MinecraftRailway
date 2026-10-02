@@ -18,11 +18,24 @@ repositories {
 loom {
     splitEnvironmentSourceSets()
 
+    mixins {
+        "metro_map" {
+            config "metro_map.client.mixins.json"
+        }
+    }
+
     mods {
         "metro_map" {
             sourceSet sourceSets.main
             sourceSet sourceSets.client
         }
+    }
+}
+
+// 使用本机 JDK 21 工具链（环境默认 java 为 17）
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
